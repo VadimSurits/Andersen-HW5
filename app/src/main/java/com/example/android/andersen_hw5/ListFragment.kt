@@ -26,7 +26,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private lateinit var contactFourSurname: TextView
     private lateinit var contactFourPhoneNumber: TextView
 
-    private lateinit var myList: List<Contact>
+    private lateinit var myList: ArrayList<Contact>
     private lateinit var contactClickListener: ContactClickListener
 
     override fun onAttach(context: Context) {
@@ -40,7 +40,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        myList = createContactList()
+        myList =
+            arguments?.getParcelableArrayList<Contact>(CONTACTS_LIST_EXTRA) as ArrayList<Contact>
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,16 +50,13 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     companion object {
-        fun newInstance() = ListFragment()
-    }
+        private const val CONTACTS_LIST_EXTRA = "CONTACTS_LIST_EXTRA"
 
-    private fun createContactList(): List<Contact> {
-        return mutableListOf(
-            Contact("Иван", "Иванов", "+71111111111"),
-            Contact("Пётр", "Петров", "+72222222222"),
-            Contact("Андрей", "Андреев", "+73333333333"),
-            Contact("Сергей", "Сергеев", "+74444444444")
-        )
+        fun newInstance(contactsList: ArrayList<Contact>) = ListFragment().also {
+            it.arguments = Bundle().apply {
+                putParcelableArrayList(CONTACTS_LIST_EXTRA, contactsList)
+            }
+        }
     }
 
     private fun initUI(view: View) {
@@ -92,26 +90,26 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
         contactOne = view.findViewById(R.id.contact_one)
         contactOne.setOnClickListener {
-            contactClickListener.onContactClicked(myList[0])
+            contactClickListener.onContactClicked(0, myList[0])
         }
 
         contactTwo = view.findViewById(R.id.contact_two)
         contactTwo.setOnClickListener {
-            contactClickListener.onContactClicked(myList[1])
+            contactClickListener.onContactClicked(1, myList[1])
         }
 
         contactThree = view.findViewById(R.id.contact_three)
         contactThree.setOnClickListener {
-            contactClickListener.onContactClicked(myList[2])
+            contactClickListener.onContactClicked(2, myList[2])
         }
 
         contactFour = view.findViewById(R.id.contact_four)
         contactFour.setOnClickListener {
-            contactClickListener.onContactClicked(myList[3])
+            contactClickListener.onContactClicked(3, myList[3])
         }
     }
 
     interface ContactClickListener {
-        fun onContactClicked(contact: Contact)
+        fun onContactClicked(index: Int, contact: Contact)
     }
 }

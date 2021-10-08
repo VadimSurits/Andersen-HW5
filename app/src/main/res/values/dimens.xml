@@ -4,5 +4,6 @@
     <dimen name="default_text_size">15sp</dimen>
     <dimen name="border_height">1dp</dimen>
     <dimen name="fragment_contact_textview_height">100dp</dimen>
-    <dimen name="fragment_contact_text_size">40sp</dimen>
+    <dimen name="fragment_contact_edittext_size">40sp</dimen>
+    <dimen name="btn_save_text_size">25sp</dimen>
 </resources>

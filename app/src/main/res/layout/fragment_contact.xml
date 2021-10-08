@@ -5,42 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/contact_name"
         android:layout_width="0dp"
         android:layout_height="@dimen/fragment_contact_textview_height"
         android:layout_marginTop="@dimen/default_margin"
         android:gravity="center"
-        android:textSize="@dimen/fragment_contact_text_size"
+        android:textSize="@dimen/fragment_contact_edittext_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/name_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/contact_surname"
         android:layout_width="0dp"
         android:layout_height="@dimen/fragment_contact_textview_height"
         android:layout_marginTop="@dimen/default_margin"
         android:gravity="center"
-        android:textSize="@dimen/fragment_contact_text_size"
+        android:textSize="@dimen/fragment_contact_edittext_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contact_name"
         tools:text="@string/surname_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/contact_phone_number"
         android:layout_width="0dp"
         android:layout_height="@dimen/fragment_contact_textview_height"
         android:layout_marginTop="@dimen/default_margin"
         android:gravity="center"
-        android:textSize="@dimen/fragment_contact_text_size"
+        android:textSize="@dimen/fragment_contact_edittext_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contact_surname"
         tools:text="@string/phone_number_title" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_save_text"
+        android:textSize="@dimen/btn_save_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_phone_number" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
