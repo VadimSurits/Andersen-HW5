@@ -25,7 +25,6 @@
         android:gravity="center"
         android:textSize="@dimen/fragment_contact_edittext_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contact_name"
         tools:text="@string/surname_title" />
@@ -38,7 +37,6 @@
         android:gravity="center"
         android:textSize="@dimen/fragment_contact_edittext_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contact_surname"
         tools:text="@string/phone_number_title" />
@@ -46,10 +44,10 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_height="@dimen/btn_save_height"
         android:text="@string/btn_save_text"
         android:textSize="@dimen/btn_save_text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contact_phone_number" />

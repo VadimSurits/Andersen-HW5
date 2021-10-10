@@ -18,6 +18,18 @@ class ContactFragment : Fragment(R.layout.fragment_contact) {
 
     private lateinit var buttonSaveClickListener: ButtonSaveClickListener
 
+    companion object {
+        private const val CONTACT_EXTRA = "CONTACT_EXTRA"
+        private const val CONTACT_INDEX_EXTRA = "CONTACT_INDEX_EXTRA"
+
+        fun newInstance(index: Int, contact: Contact) = ContactFragment().also {
+            it.arguments = Bundle().apply {
+                putParcelable(CONTACT_EXTRA, contact)
+                putInt(CONTACT_INDEX_EXTRA, index)
+            }
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is ButtonSaveClickListener) {
@@ -51,18 +63,6 @@ class ContactFragment : Fragment(R.layout.fragment_contact) {
             )
             index?.let { index ->
                 buttonSaveClickListener.onButtonSaveClicked(index, changedContact)
-            }
-        }
-    }
-
-    companion object {
-        private const val CONTACT_EXTRA = "CONTACT_EXTRA"
-        private const val CONTACT_INDEX_EXTRA = "CONTACT_INDEX_EXTRA"
-
-        fun newInstance(index: Int, contact: Contact) = ContactFragment().also {
-            it.arguments = Bundle().apply {
-                putParcelable(CONTACT_EXTRA, contact)
-                putInt(CONTACT_INDEX_EXTRA, index)
             }
         }
     }

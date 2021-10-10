@@ -29,6 +29,16 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private lateinit var myList: ArrayList<Contact>
     private lateinit var contactClickListener: ContactClickListener
 
+    companion object {
+        private const val CONTACTS_LIST_EXTRA = "CONTACTS_LIST_EXTRA"
+
+        fun newInstance(contactsList: ArrayList<Contact>) = ListFragment().also {
+            it.arguments = Bundle().apply {
+                putParcelableArrayList(CONTACTS_LIST_EXTRA, contactsList)
+            }
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is ContactClickListener) {
@@ -47,16 +57,6 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI(view)
-    }
-
-    companion object {
-        private const val CONTACTS_LIST_EXTRA = "CONTACTS_LIST_EXTRA"
-
-        fun newInstance(contactsList: ArrayList<Contact>) = ListFragment().also {
-            it.arguments = Bundle().apply {
-                putParcelableArrayList(CONTACTS_LIST_EXTRA, contactsList)
-            }
-        }
     }
 
     private fun initUI(view: View) {
