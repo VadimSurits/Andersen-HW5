@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity(), ListFragment.ContactClickListener,
     ContactFragment.ButtonSaveClickListener {
 
-    private lateinit var contactsList: ArrayList<Contact>
+    private lateinit var contactsList: MutableList<Contact>
     private var isLandscape: Boolean = false
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -23,56 +23,58 @@ class MainActivity : AppCompatActivity(), ListFragment.ContactClickListener,
 
         if (isLandscape) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
-            startContactListFragment(R.id.fragment_list_land)
+            startContactListFragment(R.id.fragment_list_land, 0)
         } else {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
-            startContactListFragment(R.id.frame_layout)
+            startContactListFragment(R.id.frame_layout, 0)
         }
     }
 
-    private fun startContactListFragment(layoutID: Int) {
+    private fun startContactListFragment(layoutID: Int, position: Int) {
         supportFragmentManager.beginTransaction().run {
-            val listFragment = ListFragment.newInstance(contactsList)
+            val listFragment = ListFragment.newInstance(contactsList, position)
             replace(layoutID, listFragment)
             commit()
         }
     }
 
-    private fun startContactFragment(layoutID: Int, index: Int, contact: Contact) {
+    private fun startContactFragment(layoutID: Int, position: Int, contact: Contact) {
         supportFragmentManager.beginTransaction().run {
-            val contactFragment = ContactFragment.newInstance(index, contact)
+            val contactFragment = ContactFragment.newInstance(position, contact)
             replace(layoutID, contactFragment)
             addToBackStack("ContactFragment")
             commit()
         }
     }
 
-    override fun onContactClicked(index: Int, contact: Contact) {
+    override fun onContactClicked(position: Int, contact: Contact) {
         if (isLandscape) {
-            startContactFragment(R.id.fragment_contact_land, index, contact)
+            startContactFragment(R.id.fragment_contact_land, position, contact)
         } else {
-            startContactFragment(R.id.frame_layout, index, contact)
+            startContactFragment(R.id.frame_layout, position, contact)
         }
     }
 
-    override fun onButtonSaveClicked(index: Int, contact: Contact) {
-        contactsList[index].apply {
+    override fun onButtonSaveClicked(position: Int, contact: Contact) {
+        contactsList[position].apply {
             name = contact.name
             surname = contact.surname
             phoneNumber = contact.phoneNumber
         }
         if (isLandscape) {
-            startContactListFragment(R.id.fragment_list_land)
+            startContactListFragment(R.id.fragment_list_land, position)
         }
         onBackPressed()
     }
 
-    private fun createContactList(): ArrayList<Contact> {
-        return arrayListOf(
-            Contact("Иван", "Иванов", "+71111111111"),
-            Contact("Пётр", "Петров", "+72222222222"),
-            Contact("Андрей", "Андреев", "+73333333333"),
-            Contact("Сергей", "Сергеев", "+74444444444")
-        )
+    private fun createContactList(): MutableList<Contact> {
+        val myList = mutableListOf<Contact>()
+        for (i in 1..110) {
+            val name = "Имя $i"
+            val surname = "Фамилия $i"
+            val phoneNumber = (89241111100 + (11 * i)).toString()
+            myList.add(Contact(name, surname, phoneNumber))
+        }
+        return myList
     }
 }

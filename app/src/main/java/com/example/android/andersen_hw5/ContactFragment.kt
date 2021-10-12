@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 class ContactFragment : Fragment(R.layout.fragment_contact) {
 
     private var contact: Contact? = null
-    private var index: Int? = null
+    private var position: Int? = null
     private lateinit var contactName: AppCompatEditText
     private lateinit var contactSurname: AppCompatEditText
     private lateinit var contactPhoneNumber: AppCompatEditText
@@ -22,10 +22,10 @@ class ContactFragment : Fragment(R.layout.fragment_contact) {
         private const val CONTACT_EXTRA = "CONTACT_EXTRA"
         private const val CONTACT_INDEX_EXTRA = "CONTACT_INDEX_EXTRA"
 
-        fun newInstance(index: Int, contact: Contact) = ContactFragment().also {
+        fun newInstance(position: Int, contact: Contact) = ContactFragment().also {
             it.arguments = Bundle().apply {
                 putParcelable(CONTACT_EXTRA, contact)
-                putInt(CONTACT_INDEX_EXTRA, index)
+                putInt(CONTACT_INDEX_EXTRA, position)
             }
         }
     }
@@ -42,7 +42,7 @@ class ContactFragment : Fragment(R.layout.fragment_contact) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         contact = arguments?.getParcelable(CONTACT_EXTRA)
-        index = arguments?.getInt(CONTACT_INDEX_EXTRA)
+        position = arguments?.getInt(CONTACT_INDEX_EXTRA)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,13 +61,13 @@ class ContactFragment : Fragment(R.layout.fragment_contact) {
                 contactSurname.text.toString(),
                 contactPhoneNumber.text.toString()
             )
-            index?.let { index ->
-                buttonSaveClickListener.onButtonSaveClicked(index, changedContact)
+            position?.let { position ->
+                buttonSaveClickListener.onButtonSaveClicked(position, changedContact)
             }
         }
     }
 
     interface ButtonSaveClickListener {
-        fun onButtonSaveClicked(index: Int, contact: Contact)
+        fun onButtonSaveClicked(position: Int, contact: Contact)
     }
 }
