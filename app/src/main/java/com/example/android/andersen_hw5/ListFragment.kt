@@ -3,15 +3,21 @@ package com.example.android.andersen_hw5
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewItemClickListener {
+class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewItemClickListener,
+    RVAdapter.RecyclerViewLongItemClickListener {
 
     private lateinit var myList: MutableList<Contact>
     private lateinit var contactClickListener: ContactClickListener
     private var position: Int = 0
+
+    private lateinit var mySearchFilter: SearchView
+    private var adapter: RVAdapter? = null
 
     companion object {
         private const val CONTACTS_LIST_EXTRA = "CONTACTS_LIST_EXTRA"
@@ -49,14 +55,42 @@ class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewIte
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = RVAdapter(myList, this)
+        adapter = RVAdapter(myList, this, this)
+        recyclerView.adapter = adapter
+
         if (position != 0) {
             recyclerView.scrollToPosition(position)
         }
+
+        mySearchFilter = view.findViewById(R.id.search_filter)
+        mySearchFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter?.filter?.filter(newText)
+                return true
+            }
+        })
     }
 
     override fun onItemClicked(position: Int) {
         contactClickListener.onContactClicked(position, myList[position])
+    }
+
+    override fun onItemLongClicked(position: Int, view: View) {
+        val myPopupMenu = PopupMenu(requireContext(), view)
+        myPopupMenu.inflate(R.menu.popup_menu)
+        myPopupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_delete -> {
+                    adapter?.deleteItem(position)
+                }
+            }
+            true
+        }
+        myPopupMenu.show()
     }
 
     interface ContactClickListener {

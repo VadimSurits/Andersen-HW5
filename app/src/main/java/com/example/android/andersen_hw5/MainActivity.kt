@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), ListFragment.ContactClickListener,
 
     private fun createContactList(): MutableList<Contact> {
         val myList = mutableListOf<Contact>()
-        for (i in 1..110) {
+        for (i in 1..120) {
             val name = "Имя $i"
             val surname = "Фамилия $i"
             val phoneNumber = (89241111100 + (11 * i)).toString()
