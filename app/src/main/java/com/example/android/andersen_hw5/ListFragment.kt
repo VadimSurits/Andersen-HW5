@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -57,6 +59,15 @@ class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewIte
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = RVAdapter(myList, this, this)
         recyclerView.adapter = adapter
+
+        val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
+        dividerItemDecoration.setDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.divider_drawable
+            )!!
+        )
+        recyclerView.addItemDecoration(dividerItemDecoration)
 
         if (position != 0) {
             recyclerView.scrollToPosition(position)
