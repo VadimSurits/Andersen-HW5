@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class RVAdapter(
-    private val myList: MutableList<Contact>,
+    private var myList: MutableList<Contact>,
     private val myRVItemClickListener: RecyclerViewItemClickListener,
     private val myRVItemLongClickListener: RecyclerViewLongItemClickListener
 ) : RecyclerView.Adapter<RVAdapter.MyViewHolder>(), Filterable {
 
     private var myFilterList = mutableListOf<Contact>()
+    private var isFilteringNow = false
 
     init {
         myFilterList = myList
@@ -39,15 +40,55 @@ class RVAdapter(
                 .load("https://picsum.photos/200/?temp=$position")
                 .into(it)
         }
-        holder.itemClicked(myRVItemClickListener, position)
+        holder.itemClicked(
+            myRVItemClickListener,
+            position,
+            myFilterList[position],
+            myFilterList,
+            myList
+        )
         holder.itemLongClicked(myRVItemLongClickListener, position)
     }
 
     override fun getItemCount() = myFilterList.size
 
     fun deleteItem(position: Int) {
-        myList.removeAt(position)
-        notifyItemRemoved(position)
+        var currentContact: Contact? = null
+        if (position == myFilterList.size - 1 || position == 0) {
+            myList.forEach {
+                if (myFilterList[position].name == it.name &&
+                    myFilterList[position].surname == it.surname &&
+                    myFilterList[position].phoneNumber == it.phoneNumber
+                ) {
+                    currentContact = it
+                }
+            }
+            myFilterList.removeAt(position)
+            notifyItemRemoved(position)
+        } else {
+            var shift = 1
+            while (true) {
+                try {
+                    myList.forEach {
+                        if (myFilterList[position - shift].name == it.name &&
+                            myFilterList[position - shift].surname == it.surname &&
+                            myFilterList[position - shift].phoneNumber == it.phoneNumber
+                        ) {
+                            currentContact = it
+                        }
+                    }
+                    myFilterList.removeAt(position - shift)
+                    notifyItemRemoved(position)
+                    break
+                } catch (e: IndexOutOfBoundsException) {
+                    shift++
+                }
+            }
+        }
+        myList.remove(currentContact)
+        if (!isFilteringNow) {
+            myList = myFilterList
+        }
     }
 
     override fun getFilter(): Filter {
@@ -55,8 +96,10 @@ class RVAdapter(
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
                 if (charSearch.isEmpty()) {
+                    isFilteringNow = false
                     myFilterList = myList
                 } else {
+                    isFilteringNow = true
                     val resultList = mutableListOf<Contact>()
                     myList.forEach {
                         if (it.name.lowercase().contains(charSearch.lowercase())
@@ -94,9 +137,20 @@ class RVAdapter(
             contactImage = itemView.findViewById(R.id.contact_image)
         }
 
-        fun itemClicked(myRVItemClickListener: RecyclerViewItemClickListener, position: Int) {
+        fun itemClicked(
+            myRVItemClickListener: RecyclerViewItemClickListener,
+            position: Int,
+            contact: Contact,
+            contactListForChange: MutableList<Contact>,
+            mainList: MutableList<Contact>
+        ) {
             itemView.setOnClickListener {
-                myRVItemClickListener.onItemClicked(position)
+                myRVItemClickListener.onItemClicked(
+                    position,
+                    contact,
+                    contactListForChange,
+                    mainList
+                )
             }
         }
 
@@ -116,6 +170,11 @@ class RVAdapter(
     }
 
     interface RecyclerViewItemClickListener {
-        fun onItemClicked(position: Int)
+        fun onItemClicked(
+            position: Int,
+            contact: Contact,
+            contactListForChange: MutableList<Contact>,
+            mainList: MutableList<Contact>,
+        )
     }
 }

@@ -75,8 +75,13 @@ class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewIte
         })
     }
 
-    override fun onItemClicked(position: Int) {
-        contactClickListener.onContactClicked(position, myList[position])
+    override fun onItemClicked(
+        position: Int,
+        contact: Contact,
+        contactListForChange: MutableList<Contact>,
+        mainList: MutableList<Contact>,
+    ) {
+        contactClickListener.onContactClicked(position, contact, contactListForChange, mainList)
     }
 
     override fun onItemLongClicked(position: Int, view: View) {
@@ -94,6 +99,11 @@ class ListFragment : Fragment(R.layout.fragment_list), RVAdapter.RecyclerViewIte
     }
 
     interface ContactClickListener {
-        fun onContactClicked(position: Int, contact: Contact)
+        fun onContactClicked(
+            position: Int,
+            contact: Contact,
+            contactListForChange: MutableList<Contact>,
+            mainList: MutableList<Contact>,
+        )
     }
 }

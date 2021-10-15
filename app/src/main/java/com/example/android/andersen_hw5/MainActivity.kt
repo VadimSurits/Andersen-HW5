@@ -38,28 +38,69 @@ class MainActivity : AppCompatActivity(), ListFragment.ContactClickListener,
         }
     }
 
-    private fun startContactFragment(layoutID: Int, position: Int, contact: Contact) {
+    private fun startContactFragment(
+        layoutID: Int,
+        position: Int,
+        contact: Contact,
+        contactListForChange: MutableList<Contact>,
+        mainList: MutableList<Contact>
+    ) {
         supportFragmentManager.beginTransaction().run {
-            val contactFragment = ContactFragment.newInstance(position, contact)
+            val contactFragment = ContactFragment.newInstance(
+                position, contact,
+                contactListForChange, mainList
+            )
             replace(layoutID, contactFragment)
             addToBackStack("ContactFragment")
             commit()
         }
     }
 
-    override fun onContactClicked(position: Int, contact: Contact) {
+    override fun onContactClicked(
+        position: Int,
+        contact: Contact,
+        contactListForChange: MutableList<Contact>,
+        mainList: MutableList<Contact>
+    ) {
         if (isLandscape) {
-            startContactFragment(R.id.fragment_contact_land, position, contact)
+            startContactFragment(
+                R.id.fragment_contact_land, position, contact,
+                contactListForChange, mainList
+            )
         } else {
-            startContactFragment(R.id.frame_layout, position, contact)
+            startContactFragment(
+                R.id.frame_layout, position, contact, contactListForChange,
+                mainList
+            )
         }
     }
 
-    override fun onButtonSaveClicked(position: Int, contact: Contact) {
-        contactsList[position].apply {
+    override fun onButtonSaveClicked(
+        position: Int,
+        contact: Contact,
+        contactListForChange: MutableList<Contact>,
+        mainList: MutableList<Contact>
+    ) {
+        var sameContactInMainList = contactListForChange[position]
+        mainList.forEach {
+            if (contactListForChange[position].name == it.name &&
+                contactListForChange[position].surname == it.surname &&
+                contactListForChange[position].phoneNumber == it.phoneNumber
+            ) {
+                sameContactInMainList = it
+            }
+        }
+        contactListForChange[position].apply {
             name = contact.name
             surname = contact.surname
             phoneNumber = contact.phoneNumber
+        }
+        mainList.forEach {
+            if (it == sameContactInMainList) {
+                it.name = contact.name
+                it.surname = contact.surname
+                it.phoneNumber = contact.phoneNumber
+            }
         }
         if (isLandscape) {
             startContactListFragment(R.id.fragment_list_land, position)
